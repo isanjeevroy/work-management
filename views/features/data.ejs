@@ -4,8 +4,13 @@
   <div class="data">
     <div class="job_name">
         <h1><%= data.job_name %> </h1>
-        <a href="/delete/<%= data._id %>" style="display: inline;">Delete</a>
+        <div class="btn-delete-print">
+            <a href="/delete/<%= data._id %>" style="display: inline;">Delete</a>
+            <a class="" href="/print/<%= data._id %>">Print</a>
+        </div>
+        
     </div>
+   
       <div class="status">
           <div class="completed">
               <h4>Completed</h2>
@@ -56,4 +61,6 @@
       <a href="?page=<%= currentPage + 1 %>">Next</a>
   <% } %>
 </div>
+
+
 

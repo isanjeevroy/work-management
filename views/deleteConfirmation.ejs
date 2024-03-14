@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Confirmation</title>
+</head>
+<body>
+    <script>
+        // Display the alert message when the page loads
+        window.onload = function() {
+            var confirmation = confirm("<%= alertMessage %>");
+            if (confirmation) {
+                // If confirmed, redirect to the delete route
+                window.location.href = "/confirm-delete/<%= jobId %>";
+            } else {
+                // If not confirmed, redirect back to the previous page
+                window.history.back();
+            }
+        };
+    </script>
+</body>
+</html>

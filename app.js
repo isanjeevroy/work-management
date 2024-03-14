@@ -13,6 +13,10 @@ const Job = require("./models/job.js");
 const WrapAsync = require("./utils/WrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
 const flash = require("connect-flash");
+const PDFDocument = require('pdfkit');
+const fs = require('fs');
+const puppeteer = require('puppeteer');
+
 
 // Databases connection
 // const MONGO_URL = "mongodb://127.0.0.1:27017/sujeetwork";
@@ -37,7 +41,6 @@ app.engine('ejs', ejsMate);
 app.use(express.static(path.join(__dirname, '/public')));
 
 
-
 const sessionOptions ={
     secret:"rajivchutiya",
     resave:false,
@@ -56,7 +59,75 @@ app.use((req,res,next)=>{
     res.locals.success=req.flash("success");
     res.locals.error=req.flash("error");
     next();
-})
+});
+
+// print data
+app.get("/print/:jobId", async(req, res) => {
+
+  const jobId = req.params.jobId;
+  const data = await Job.findById(jobId);
+  if (!data) {
+    req.flash("error","Job not found");
+    return res.status(404).redirect("/"); // Redirect to home page or an error page
+  }
+
+  const doc = new PDFDocument();
+
+  // Get current date and time
+  const currentDate = new Date().toLocaleString(); // Get current date and time
+  
+  // Print current date and time at top right side
+  doc.text(`Date and Time: ${currentDate}`, { align: 'right', width: 300 });
+
+  // Set up PDF content
+  doc.moveDown(2).fontSize(18).text(data.job_name, { align: 'center' }).moveDown(1);
+  
+  // Arrays to store completed and pending works
+  const completedWorks = [];
+  const pendingWorks = [];
+
+  // Separate completed and pending works
+  data.works.forEach(work => {
+    if (work.status) {
+      completedWorks.push(work.name);
+    } else {
+      pendingWorks.push(work.name);
+    }
+  });
+
+  // Function to calculate padding for numerical numbering
+  function calculatePadding(num) {
+    const maxLength = completedWorks.length + pendingWorks.length;
+    return (maxLength.toString().length - num.toString().length) + 1;
+  }
+
+  // Print completed works
+  doc.moveDown().fontSize(15).fillColor('green').text('Completed Status:');
+  completedWorks.forEach((work, index) => {
+    const padding = calculatePadding(index + 1);
+    doc.moveDown().fontSize(12).fillColor('black').text(`${index + 1}.${' '.repeat(padding)}${work}`);
+  });
+
+  // Print pending works
+  doc.moveDown().fontSize(15).fillColor('red').text('Pending Status:');
+  pendingWorks.forEach((work, index) => {
+    const padding = calculatePadding(index + 1);
+    doc.moveDown().fontSize(12).fillColor('black').text(`${index + 1}.${' '.repeat(padding)}${work}`);
+  });
+
+  // Finalize PDF
+  doc.end();
+
+  // Set response headers for PDF download
+  res.setHeader('Content-Disposition', 'attachment; filename="output.pdf"');
+  res.setHeader('Content-Type', 'application/pdf');
+
+  // Pipe the PDF document to the response stream
+  doc.pipe(res);
+});
+
+
+
 
 
 // Index Route
@@ -83,6 +154,7 @@ app.get("/data",WrapAsync(async(req,res)=>{
 app.get("/newjob",(req,res)=>{
     res.render("features/new-job.ejs");
 })
+
 //  Create new Job
 app.post("/newjob",WrapAsync(async(req,res)=>{
     const {job_name} = req.body;
@@ -107,19 +179,56 @@ app.post("/newjob",WrapAsync(async(req,res)=>{
        res.redirect(`/data?page=${totalPages}`);
 }));
 
-// Delete Job Route
-app.get("/delete/:jobId",WrapAsync(async(req,res)=>{
-    const jobId = req.params.jobId;
+//Delete Job Route
+// app.get("/delete/:jobId",WrapAsync(async(req,res)=>{
+//     const jobId = req.params.jobId;
 
-    const deletedJob = await Job.findByIdAndDelete(jobId);
-    const previousUrl = req.get('Referer') || '/';
-    const { pathname, search } = new URL(previousUrl); // Parse the previous URL
-    const params = new URLSearchParams(search); // Parse the query string
-    const page = params.get('page'); // Get the value of the 'page' parameter
-    const pageNo = (page>2)?page-1:1;
-    req.flash("error","Job has deleted!");
-    res.redirect(`/data?page=${pageNo}`);
+//     const deletedJob = await Job.findByIdAndDelete(jobId);
+//     const previousUrl = req.get('Referer') || '/';
+//     const { pathname, search } = new URL(previousUrl); // Parse the previous URL
+//     const params = new URLSearchParams(search); // Parse the query string
+//     const page = params.get('page'); // Get the value of the 'page' parameter
+//     const pageNo = (page>2)?page-1:1;
+//     req.flash("error","Job has deleted!");
+//     res.redirect(`/data?page=${pageNo}`);
+// }));
+
+app.get("/delete/:jobId", WrapAsync(async(req, res) => {
+  const previousUrl1 = req.session.urlHistory && req.session.urlHistory.length >= 2 ? req.session.urlHistory[req.session.urlHistory.length - 2] : "/";
+    const previousUrl2 = req.session.urlHistory && req.session.urlHistory.length >= 3 ? req.session.urlHistory[req.session.urlHistory.length - 3] : "/";
+
+  const jobId = req.params.jobId;
+  const alertMessage = "Are you sure you want to delete this job?";
+  res.render('deleteConfirmation', { alertMessage,jobId });
 }));
+
+
+app.get("/confirm-delete/:jobId", WrapAsync(async(req, res) => {
+  const jobId = req.params.jobId;
+
+  const deletedJob = await Job.findByIdAndDelete(jobId);
+  const previousUrl = req.get('Referer') || '/';
+  console.log(previousUrl);
+  const { pathname, search } = new URL(previousUrl); // Parse the previous URL
+  const params = new URLSearchParams(search); // Parse the query string
+  const page = params.get('page'); // Get the value of the 'page' parameter
+  const pageNo = (page > 2) ? page - 1 : 1;
+  req.flash("error", "Job has been deleted!");
+  res.redirect(`/data?page=${pageNo}`);
+}));
+
+
+
+
+
+
+
+
+
+
+
+
+
 // new work 
 app.post("/job/:jobId", WrapAsync(async(req,res)=>{
         const {name} = req.body;

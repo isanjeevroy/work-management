@@ -24,7 +24,10 @@ body{
 
 
 /*  Index Page */
-
+.btn-delete-print{
+    display: flex;
+    justify-content: space-around;
+}
 
 .data{
     display: flex;
