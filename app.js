@@ -1,8 +1,6 @@
 if(process.env.NDOE_ENV !="production"){
     require('dotenv').config();
 }
-
-
 const express = require('express');
 const app = express();
 const port = 3000;
@@ -18,7 +16,7 @@ const flash = require("connect-flash");
 
 // Databases connection
 // const MONGO_URL = "mongodb://127.0.0.1:27017/sujeetwork";
-const dbUrl = process.env.ATLASDB_URL;
+const dbUrl = process.env.ATLAS_URL;
 
 main().then(() => {
     console.log("Connected to DB");
