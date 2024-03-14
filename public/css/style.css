@@ -25,6 +25,7 @@ body{
 
 /*  Index Page */
 
+
 .data{
     display: flex;
     flex-direction: column;
@@ -59,15 +60,39 @@ body{
     background-color: #f0f0f0;
 }
 
-.status{
+
+.status {
     display: flex;
     justify-content: space-between;
-    /* align-items: center; */
-
    background-color: black;
    width: 100%;
    border-radius: 25px;
 }
+/* media  */
+@media (max-width: 600px) {
+    .status{
+        flex-direction: column;
+    }
+    .completed{
+        width: 100% !important;
+        border-radius: 20px!important;
+        margin-bottom: 10px !important;
+    }
+
+    .completed h4{
+        border-radius: 20px 20px 0 0 !important;
+    }
+    .pending{
+        width: 100% !important;
+        border-radius: 20px !important;
+    }
+    .pending h4{
+        border-radius: 20px 20px 0 0 !important;
+    }
+   
+}
+
+
 .completed{
     background-color: rgb(132, 132, 206);
     width: 49.5%;
