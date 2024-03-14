@@ -1,0 +1,16 @@
+<% layout("/layouts/boilerplate")%>
+
+<div class="status-box">
+  <h4>Username: <b>@<%= user.username %></b> </h4>
+  <h4>Work Status: <b> <%=user.status %> </b></h4> <br><br>
+<form action="/status/<%= user.username %>?_method=PUT" method="POST">
+    <label class="status" for="status">Choose your status:</label>
+    <select name="status" id="status">
+      <option value="completed">Completed</option>
+      <option value="pending">Pending</option>
+    </select>
+    <br><br>
+    <button class="btn btn-primary">Submit</button>
+  </form>
+
+</div>

@@ -1,0 +1,59 @@
+<% layout("/layouts/boilerplate")%>
+
+<% for(let data of allData){ %>
+  <div class="data">
+    <div class="job_name">
+        <h1><%= data.job_name %> </h1>
+        <a href="/delete/<%= data._id %>" style="display: inline;">Delete</a>
+    </div>
+      <div class="status">
+          <div class="completed">
+              <h4>Completed</h2>
+              <ul class="job-list">
+                  <% data.works.forEach(work => { %>
+                      <% if(work.status){ %>
+                          <li>
+                            <p ><%= work.name %></p>
+                            <a href="/job/<%= data._id %>/work/<%= work._id %>/update">Undo</a>
+                          </li>
+                      <% } %>
+                  <% }); %>
+              </ul>
+          </div>
+          <div class="pending">
+              <h4>Pending</h2>
+              <ul class="job-list">
+                  <% data.works.forEach(work => { %>
+                      <% if(!work.status){ %>
+                          <li>
+                              <p><%= work.name %></p>
+                              <a href="/job/<%= data._id %>/work/<%= work._id %>/update">Done</a>
+                              <a href="/job/<%= data._id %>/work/<%= work._id %>/delete">Delete</a> 
+                          </li> 
+                      <% } %>
+                  <% }); %>
+                  <form method="POST" action="/job/<%= data._id %>">
+                    <div class="input-group">
+                        <input class="form-control " aria-describedby="button-addon2" type="text" name="name" id="name" required>
+                        <button style="color: black !important;" class="btn btn-outline-secondary" id="button-addon2" >Add Work</button>
+                    </div>
+                    
+                  </form>
+                </ul>
+          </div>
+      </div>
+  </div>
+<% } %>
+
+<!-- Pagination -->
+<div class="pagination">
+  <% if (currentPage > 1) { %>
+      <a href="?page=<%= currentPage - 1 %>">Previous</a>
+  <% } %>
+  
+  
+  <% if (currentPage < totalPages) { %>
+      <a href="?page=<%= currentPage + 1 %>">Next</a>
+  <% } %>
+</div>
+
