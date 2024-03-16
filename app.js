@@ -151,8 +151,22 @@ app.get("/print/:jobId", async (req, res) => {
         req.flash("error","you must be logged in to print");
         return res.redirect("/login");
     }
-    try {
-        const browser = await puppeteer.launch();
+    // try {
+        const browser = await puppeteer.launch({
+            headless: chromium.headless,
+            args: [
+              ...chromium.args,
+              "--disable-web-security",
+              "--hide-scrollbars",
+              // "--disable-application-cache",
+              // "--no-sandbox",
+            ],
+            defaultViewport: chromium.defaultViewport,
+            executablePath: await chromium.executablePath(
+              `https://github.com/Sparticuz/chromium/releases/download/v121.0.0/chromium-v121.0.0-pack.tar`
+            ),
+            ignoreHTTPSErrors: true,
+          });
         const page = await browser.newPage();
         await page.goto(`${req.protocol}://${req.get('host')}/${jobId}/print-data`, {
             waitUntil: "networkidle2"
@@ -172,10 +186,10 @@ app.get("/print/:jobId", async (req, res) => {
                 console.log(err);
             }
         });
-    } catch (error) {
-        console.error(error);
-        res.status(500).send("Error generating PDF");
-    }
+    // } catch (error) {
+    //     console.error(error);
+    //     res.status(500).send("Error generating PDF");
+    // }
 });
 
 
