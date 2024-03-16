@@ -1,0 +1,81 @@
+
+
+
+<style>
+    body{
+        margin: 0;
+        padding: 0;
+        font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .main-container{
+        width: 100vw;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .container{
+        /* background-color: red; */
+        display: flex;
+        justify-content: space-between;
+        width: 99%;
+        background-color: black;
+    }
+    .completed{
+        width: 49.5%;
+        background-color: white;
+    }
+    .completed h3{
+        background-color: yellow;
+        font-size: 23px;
+        text-align: center;
+        margin-top: 0;
+    }
+    .completed ol li{
+        font-size: 20px;
+    }
+    .pending{
+        width: 49.4%;
+        background-color: white;
+    }
+    .pending h3{
+        background-color: yellow;
+        font-size: 23px;
+        text-align: center;
+        margin-top: 0;
+    }
+    .pending ol li{
+        font-size: 20px;
+    }
+</style>
+<div class="main-container">
+    <header>
+        <h3 style="border-bottom: 2px solid black;"><%= new Date().toDateString() %></h3>
+    </header>
+    
+    <h1><%= data.job_name %></h1>
+<div class="container">
+    <div class="completed">
+        <h3>Completed</h3>
+         <ol type="1">
+            <% data.works.forEach(work => { %>
+                <% if(work.status){ %>
+                    <li><%= work.name %></li>
+                <% } %>
+            <% }); %> 
+         </ol>
+    </div>
+    <div class="pending">
+        <h3>Pending</h3>
+        <ol type="1">
+            <% data.works.forEach(work => { %>
+                <% if(!work.status){ %>
+                    <li><%= work.name %></li>
+                <% } %>
+            <% }); %> 
+         </ol>
+    </div>
+    </div>
+</div>
+</div>
+
