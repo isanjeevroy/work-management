@@ -153,20 +153,10 @@ app.get("/print/:jobId", async (req, res) => {
     }
     // try {
         const browser = await puppeteer.launch({
-            headless: chromium.headless,
-            args: [
-              ...chromium.args,
-              "--disable-web-security",
-              "--hide-scrollbars",
-              // "--disable-application-cache",
-              // "--no-sandbox",
-            ],
-            defaultViewport: chromium.defaultViewport,
-            executablePath: await chromium.executablePath(
-              `https://github.com/Sparticuz/chromium/releases/download/v121.0.0/chromium-v121.0.0-pack.tar`
-            ),
-            ignoreHTTPSErrors: true,
-          });
+            headless: 'shell',
+            args: ['--enable-gpu','--no-sandbox', '--disable-setuid-sandbox'],
+        
+        });
         const page = await browser.newPage();
         await page.goto(`${req.protocol}://${req.get('host')}/${jobId}/print-data`, {
             waitUntil: "networkidle2"
