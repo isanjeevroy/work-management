@@ -60,9 +60,10 @@ store.on("error",()=>{
     console.log("ERROR IN MONGO SESSION STORE",err);
 })
 const sessionOptions ={
+    store,
     secret:process.env.SECRET,
     resave:false,
-    saveUninitialized:true,
+    saveUninitialized:false,
     cookie:{
         expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
         maxAge: 1000 * 60 * 60 * 24 * 7,
@@ -148,39 +149,39 @@ app.get("/:jobId/print-data", async (req, res) => {
   
 });
 
-// print Route - Button
-// app.get("/print/:jobId", async (req, res) => {
-//     const jobId = req.params.jobId;
-//     if (!req.isAuthenticated()) {
-//         req.flash("error", "You must be logged in to print.");
-//         return res.redirect("/login");
-//     }
+//print Route - Button
+app.get("/print/:jobId", async (req, res) => {
+    const jobId = req.params.jobId;
+    if (!req.isAuthenticated()) {
+        req.flash("error", "You must be logged in to print.");
+        return res.redirect("/login");
+    }
 
-//     try {
-//         const browser = await puppeteer.launch();
-//         const page = await browser.newPage();
-//         await page.goto(`${req.protocol}://${req.get('host')}/${jobId}/print-data`, {
-//             waitUntil: "networkidle2"
-//         });
-//         await page.setViewport({ width: 2080, height: 1050 });
+    try {
+        const browser = await puppeteer.launch();
+        const page = await browser.newPage();
+        await page.goto(`${req.protocol}://${req.get('host')}/${jobId}/print-data`, {
+            waitUntil: "networkidle2"
+        });
+        await page.setViewport({ width: 2080, height: 1050 });
         
-//         // Generate PDF as a buffer
-//         const pdfBuffer = await page.pdf({
-//             printBackground: true,
-//             format: "A4"
-//         });
+        // Generate PDF as a buffer
+        const pdfBuffer = await page.pdf({
+            printBackground: true,
+            format: "A4"
+        });
 
-//         await browser.close();
+        await browser.close();
 
-//         // Send PDF as response
-//         res.setHeader('Content-Type', 'application/pdf');
-//         res.setHeader('Content-Disposition', `attachment; filename="${jobId}.pdf"`);
-//         res.send(pdfBuffer);
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).send("Error generating PDF");
-//     }
-// });
+        // Send PDF as response
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', `attachment; filename="${jobId}.pdf"`);
+        res.send(pdfBuffer);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error generating PDF");
+    }
+});
 
 
 
