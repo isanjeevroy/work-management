@@ -19,6 +19,9 @@ const fs = require('fs');
 const passport = require("passport");
 const localStrategy = require("passport-local");
 const puppeteer = require('puppeteer');
+// const puppeteer = require('puppeteer-extra');
+// const pluginStealth = require('puppeteer-extra-plugin-stealth');
+// puppeteer.use(pluginStealth());
 
 
 // Databases connection
@@ -154,8 +157,8 @@ app.get("/print/:jobId", async (req, res) => {
 
     try {
         const browser = await puppeteer.launch({
-            headless: 'shell',
-            args: ['--enable-gpu', '--no-sandbox', '--disable-setuid-sandbox'],
+            headless: false,
+    args: ['--headless'],
         });
         const page = await browser.newPage();
         await page.goto(`${req.protocol}://${req.get('host')}/${jobId}/print-data`, {
@@ -180,6 +183,8 @@ app.get("/print/:jobId", async (req, res) => {
         res.status(500).send("Error generating PDF");
     }
 });
+
+
 
 
 
