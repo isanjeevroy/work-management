@@ -147,6 +147,7 @@ app.get("/:jobId/print-data", async (req, res) => {
     res.render("print-data.ejs",{data});
   
 });
+
 // print Route - Button
 app.get("/print/:jobId", async (req, res) => {
     const jobId = req.params.jobId;
@@ -157,8 +158,15 @@ app.get("/print/:jobId", async (req, res) => {
 
     try {
         const browser = await puppeteer.launch({
-            headless: false,
-    args: ['--headless'],
+            args:[
+                "--disable-setuid-sandbox",
+                "--no-sandbox",
+                "--single-process",
+                "--no-zygote",
+            ],
+            executablePath:process.env.NODE_ENV ==='production' ? process.env.PUPPETEER_EXECUTABLE_PATH
+            :puppeteer.executablePath(),
+
         });
         const page = await browser.newPage();
         await page.goto(`${req.protocol}://${req.get('host')}/${jobId}/print-data`, {
