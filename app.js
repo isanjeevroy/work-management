@@ -48,13 +48,13 @@ app.use(express.static(path.join(__dirname, '/public')));
 
 
 
-// const store = MongoStore.create({
-//     mongoUrl: MONGO_URL,
-//     crypto:{
-//         secret: process.env.SECRET,
-//     },
-//     touchAfter: 24* 3600,
-// });
+const store = MongoStore.create({
+    mongoUrl: MONGO_URL,
+    crypto:{
+        secret: process.env.SECRET,
+    },
+    touchAfter: 24* 3600,
+});
 
 store.on("error",()=>{
     console.log("ERROR IN MONGO SESSION STORE",err);
@@ -157,17 +157,7 @@ app.get("/print/:jobId", async (req, res) => {
     }
 
     try {
-        const browser = await puppeteer.launch({
-            args:[
-                "--disable-setuid-sandbox",
-                "--no-sandbox",
-                "--single-process",
-                "--no-zygote",
-            ],
-            executablePath:process.env.NODE_ENV ==='production' ? process.env.PUPPETEER_EXECUTABLE_PATH
-            :puppeteer.executablePath(),
-
-        });
+        const browser = await puppeteer.launch();
         const page = await browser.newPage();
         await page.goto(`${req.protocol}://${req.get('host')}/${jobId}/print-data`, {
             waitUntil: "networkidle2"
