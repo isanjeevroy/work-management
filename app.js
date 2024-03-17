@@ -60,6 +60,7 @@ store.on("error",()=>{
     console.log("ERROR IN MONGO SESSION STORE",err);
 })
 const sessionOptions ={
+    store,
     secret:process.env.SECRET,
     resave:false,
     saveUninitialized:true,
