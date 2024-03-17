@@ -147,40 +147,40 @@ app.get("/:jobId/print-data", async (req, res) => {
 // print Route - Button
 app.get("/print/:jobId", async (req, res) => {
     const jobId = req.params.jobId;
-    if(!req.isAuthenticated()){
-        req.flash("error","you must be logged in to print");
+    if (!req.isAuthenticated()) {
+        req.flash("error", "You must be logged in to print.");
         return res.redirect("/login");
     }
-    // try {
+
+    try {
         const browser = await puppeteer.launch({
             headless: 'shell',
-            args: ['--enable-gpu','--no-sandbox', '--disable-setuid-sandbox'],
-        
+            args: ['--enable-gpu', '--no-sandbox', '--disable-setuid-sandbox'],
         });
         const page = await browser.newPage();
         await page.goto(`${req.protocol}://${req.get('host')}/${jobId}/print-data`, {
             waitUntil: "networkidle2"
         });
         await page.setViewport({ width: 2080, height: 1050 });
-        const todayDate = new Date();
-        const pdfPath = path.join(__dirname, 'public/files', `${todayDate.getTime()}-${jobId}.pdf`);
-        await page.pdf({
-            printBackground:true,
-            path: pdfPath,
+        
+        // Generate PDF as a buffer
+        const pdfBuffer = await page.pdf({
+            printBackground: true,
             format: "A4"
         });
-        await browser.close(); 
-        // res.sendFile(pdfPath, { headers: { "Content-Type": "application/pdf" } });
-        res.download(pdfPath,function(err){
-            if(err){
-                console.log(err);
-            }
-        });
-    // } catch (error) {
-    //     console.error(error);
-    //     res.status(500).send("Error generating PDF");
-    // }
+
+        await browser.close();
+
+        // Send PDF as response
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', `attachment; filename="${jobId}.pdf"`);
+        res.send(pdfBuffer);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error generating PDF");
+    }
 });
+
 
 
 // Index Route
