@@ -22,7 +22,7 @@ const puppeteer = require('puppeteer');
 // const puppeteer = require('puppeteer-extra');
 // const pluginStealth = require('puppeteer-extra-plugin-stealth');
 // puppeteer.use(pluginStealth());
-
+require('dotenv').config();
 
 // Databases connection
 // const MONGO_URL = "mongodb://127.0.0.1:27017/sujeetwork";
@@ -157,9 +157,19 @@ app.get("/print/:jobId", async (req, res) => {
         req.flash("error", "You must be logged in to print.");
         return res.redirect("/login");
     }
+    const browser = await puppeteer.launch({
+        args:[
+            "--disable-setuid-sandbox",
+            "--no-sandbox",
+            "--single-process",
+            "--no-zygote",
+        ],
+        executablePath:process.env.NODE_ENV ==="production" ? process.env.PUPPETEER_EXECUTABLE_PATH
+        : puppeteer.executablePath(),
+    });
 
     try {
-        const browser = await puppeteer.launch();
+        
         const page = await browser.newPage();
         await page.goto(`${req.protocol}://${req.get('host')}/${jobId}/print-data`, {
             waitUntil: "networkidle2"
