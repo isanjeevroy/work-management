@@ -18,7 +18,7 @@ const MongoStore = require('connect-mongo');
 const fs = require('fs');
 const passport = require("passport");
 const localStrategy = require("passport-local");
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-core');
 // const puppeteer = require('puppeteer-extra');
 // const pluginStealth = require('puppeteer-extra-plugin-stealth');
 // puppeteer.use(pluginStealth());
