@@ -160,8 +160,9 @@ app.get("/print/:jobId", async (req, res) => {
 
     try {
         const browser = await puppeteer.launch({
-            executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe', // Update with the correct path
-            ignoreDefaultArgs: ['--disable-extensions'],
+            executablePath: '/usr/bin/google-chrome', // Update with the correct path for Linux
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    ignoreDefaultArgs: ['--disable-extensions'],
         }
         );
         const page = await browser.newPage();
