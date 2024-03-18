@@ -18,7 +18,7 @@ const MongoStore = require('connect-mongo');
 const fs = require('fs');
 const passport = require("passport");
 const localStrategy = require("passport-local");
-const puppeteer = require('puppeteer-core');
+const puppeteer = require('puppeteer');
 // const puppeteer = require('puppeteer-extra');
 // const pluginStealth = require('puppeteer-extra-plugin-stealth');
 // puppeteer.use(pluginStealth());
@@ -159,12 +159,7 @@ app.get("/print/:jobId", async (req, res) => {
     }
 
     try {
-        const browser = await puppeteer.launch({
-            executablePath: '/usr/bin/google-chrome', // Update with the correct path for Linux
-    args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    ignoreDefaultArgs: ['--disable-extensions'],
-        }
-        );
+        const browser = await puppeteer.launch();
         const page = await browser.newPage();
         await page.goto(`${req.protocol}://${req.get('host')}/${jobId}/print-data`, {
             waitUntil: "networkidle2"
