@@ -150,6 +150,7 @@ app.get("/:jobId/print-data", async (req, res) => {
 });
 
 //print Route - Button
+
 app.get("/print/:jobId", async (req, res) => {
     const jobId = req.params.jobId;
     if (!req.isAuthenticated()) {
@@ -182,9 +183,6 @@ app.get("/print/:jobId", async (req, res) => {
         res.status(500).send("Error generating PDF");
     }
 });
-
-
-
 
 
 // Index Route
