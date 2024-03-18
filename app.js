@@ -159,7 +159,11 @@ app.get("/print/:jobId", async (req, res) => {
     }
 
     try {
-        const browser = await puppeteer.launch();
+        const browser = await puppeteer.launch({
+            executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe', // Update with the correct path
+            ignoreDefaultArgs: ['--disable-extensions'],
+        }
+        );
         const page = await browser.newPage();
         await page.goto(`${req.protocol}://${req.get('host')}/${jobId}/print-data`, {
             waitUntil: "networkidle2"
