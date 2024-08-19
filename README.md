@@ -4,7 +4,7 @@ The Work Management App is a task management tool that allows users to create jo
 
 ## ✨ Features
 - **Job Management**: Create, edit, and delete jobs.
-- **Task Management**: Add tasks to jobs, mark them as completed or pending.
+- **Task Management**: Add tasks to jobs, and mark them as completed or pending.
 - **Task Status Tracking**: View tasks under completed or pending categories.
 - **PDF Report Generation**: Generate a final report of the job, showing completed and pending tasks, in PDF format.
 
@@ -13,7 +13,7 @@ The Work Management App is a task management tool that allows users to create jo
 - **Frontend**: EJS (Embedded JavaScript)
 - **Database**: MongoDB
 
-## Installation
+## 🚀 Getting Started
 
 ### Prerequisites
 - [Node.js](https://nodejs.org/) (v14 or higher)
@@ -35,3 +35,23 @@ The Work Management App is a task management tool that allows users to create jo
    ```bash
    npm run dev
 5. Visit `http://localhost:3000` in your browser to use the app.
+
+## Usages
+   1. Create a Job: Click on "Create New Job" and provide the necessary details.
+   2. Add Tasks: Within a job, add tasks by specifying task details.
+   3. Update Task Status: Mark tasks as completed or pending as you progress.
+   4. Generate PDF Report: Once all tasks are managed, generate a PDF report summarizing the job's status.
+
+## Folder Structures
+   ```bash
+   work-management/
+   │
+   ├── public/             # Static files (CSS, JS, images)
+   ├── routes/             # Express route definitions
+   ├── views/              # EJS templates
+   ├── models/             # MongoDB models
+   ├── controllers/        # Route handler functions
+   ├── .env                # Environment variables
+   ├── package.json        # NPM dependencies and scripts
+   └── app.js              # Application entry point
+
