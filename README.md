@@ -43,5 +43,21 @@ The Work Management App is a task management tool that allows users to create jo
    2. Add Tasks: Within a job, add tasks by specifying task details.
    3. Update Task Status: Mark tasks as completed or pending as you progress.
    4. Generate PDF Report: Once all tasks are managed, generate a PDF report summarizing the job's status.
+## Contributing
+
+Contributions are welcome! Please fork the repository and submit a pull request for any enhancements, bug fixes, or new features.
+1. Fork the repository.
+2. Create a new branch ( `git checkout -b feature-branch` ).
+3. Commit your changes ( `git commit -m 'Add some feature'` ).
+4. Push to the branch ( `git push origin feature-branch `).
+5. Open a Pull Request.
+
+## License
+
+This project is licensed under the MIT License. See the `LICENSE` file for more details.
+
+## Contact
+
+For any inquiries or support, please reach out to [![Instagram](https://img.shields.io/badge/Instagram-%40isanjeevroy-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://www.instagram.com/isanjeevroy/)
 
 
