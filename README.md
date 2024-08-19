@@ -12,6 +12,8 @@ The Work Management App is a task management tool that allows users to create jo
 - **Backend**: Node.js, Express.js
 - **Frontend**: EJS (Embedded JavaScript)
 - **Database**: MongoDB
+- **Containerization**: Docker
+
 
 ## 🚀 Getting Started
 
