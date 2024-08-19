@@ -42,16 +42,4 @@ The Work Management App is a task management tool that allows users to create jo
    3. Update Task Status: Mark tasks as completed or pending as you progress.
    4. Generate PDF Report: Once all tasks are managed, generate a PDF report summarizing the job's status.
 
-## Folder Structures
-   ```bash
-   work-management/
-   │
-   ├── public/             # Static files (CSS, JS, images)
-   ├── routes/             # Express route definitions
-   ├── views/              # EJS templates
-   ├── models/             # MongoDB models
-   ├── controllers/        # Route handler functions
-   ├── .env                # Environment variables
-   ├── package.json        # NPM dependencies and scripts
-   └── app.js              # Application entry point
 
