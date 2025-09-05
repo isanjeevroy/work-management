@@ -1,13 +1,33 @@
-<%if(success && success.length){ %>
-    <div class="alert alert-success alert-dismissible fade show col-6 offset-3 mt-3" role="alert">
-        <%= success %>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-<%}%>
+<% if (success && success.length) { %>
+  <div 
+    class="max-w-2xl mx-auto mt-4 flex items-center justify-between rounded-lg border border-green-300 bg-green-50 px-4 py-3 text-green-800 shadow-sm"
+    role="alert"
+  >
+    <span><%= success %></span>
+    <button 
+      type="button" 
+      onclick="this.parentElement.remove()" 
+      class="ml-4 text-green-600 hover:text-green-800"
+      aria-label="Close"
+    >
+      ✕
+    </button>
+  </div>
+<% } %>
 
-<%if(error && error.length){ %>
-    <div class="alert alert-danger alert-dismissible fade show col-6 offset-3 mt-3" role="alert">
-        <%= error %>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-<%}%>
+<% if (error && error.length) { %>
+  <div 
+    class="max-w-2xl mx-auto mt-4 flex items-center justify-between rounded-lg border border-red-300 bg-red-50 px-4 py-3 text-red-800 shadow-sm"
+    role="alert"
+  >
+    <span><%= error %></span>
+    <button 
+      type="button" 
+      onclick="this.parentElement.remove()" 
+      class="ml-4 text-red-600 hover:text-red-800"
+      aria-label="Close"
+    >
+      ✕
+    </button>
+  </div>
+<% } %>

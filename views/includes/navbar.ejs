@@ -1,17 +1,22 @@
- 
-<nav class="navbar navbar-expand-sm sm-body-tertiary  border-bottom sticky-top">
-    <div class="container-fluid ms-auto">
-        <div class="nav-bar">
+<nav class="bg-white border-b shadow-sm sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+      
+      <!-- Left links -->
+      <div class="flex space-x-6">
+        <a href="/data" class="text-gray-800 font-semibold hover:text-blue-600 transition-colors">Home</a>
+        <a href="/newjob" class="text-gray-800 font-semibold hover:text-blue-600 transition-colors">Add Job</a>
+      </div>
 
-            <div class="nav-heading">
-                <a class="navbar-brand" href="/data">Home</a>      
-                <a class="navbar-brand" href="/newjob">Add Job</a>
-            </div>
-            
-            <% if(currUser){%>
-            <a class="nav-link" href="/logout"><button class="btn btn-danger">Logout</button></a>
-            <%} %>
-            
-        </div>    
+      <!-- Right (Logout) -->
+      <% if (currUser) { %>
+        <a href="/logout">
+          <button class="bg-red-600 text-white px-4 py-2 rounded-lg font-medium shadow hover:bg-red-700 transition-colors">
+            Logout
+          </button>
+        </a>
+      <% } %>
+
     </div>
+  </div>
 </nav>
