@@ -1,5 +1,22 @@
 <% layout("/layouts/boilerplate")%>
 
+<!-- Progress Overlay for PDF Generation -->
+<div id="pdfProgressOverlay" class="fixed inset-0 bg-black bg-opacity-80 backdrop-blur-sm flex items-center justify-center z-50 hidden">
+  <div class="bg-white rounded-2xl p-8 max-w-sm mx-4 text-center shadow-2xl">
+    <div class="mb-4">
+      <div class="inline-block w-12 h-12 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
+    </div>
+    <h3 class="text-xl font-bold text-gray-800 mb-2">Generating PDF Report</h3>
+    <p class="text-gray-600 mb-4">Please wait while your report is being prepared...</p>
+    <div class="bg-gray-200 rounded-full h-2 mb-4">
+      <div id="progressBar" class="bg-gradient-to-r from-indigo-500 to-purple-600 h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+    </div>
+    <button onclick="cancelExport()" class="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-700 rounded-lg transition-colors text-sm">
+      Cancel
+    </button>
+  </div>
+</div>
+
 <div class="max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-12 space-y-6 sm:space-y-8">
   <!-- Page Header -->
   <div class="text-center mb-8 sm:mb-12">
@@ -50,7 +67,7 @@
                 <div class="text-xs sm:text-sm text-indigo-100">Complete</div>
               </div>
               <div class="flex flex-row sm:flex-col space-x-2 sm:space-x-0 sm:space-y-2 ml-4">
-                <a href="/print/<%= data._id %>" 
+                <a href="#" onclick="showExportProgress('/print/<%= data._id %>'); return false;" 
                    class="flex items-center px-3 py-2 sm:px-4 sm:py-2 bg-white/20 backdrop-blur-sm text-white rounded-lg sm:rounded-xl hover:bg-white/30 transition-all duration-300 font-medium text-sm">
                    <i class="fas fa-print mr-1 sm:mr-2"></i>
                    <span class="hidden sm:inline">Export</span>
@@ -298,3 +315,110 @@
      <i class="fas fa-plus text-lg sm:text-xl"></i>
   </a>
 </div>
+
+<script>
+let exportWindow;
+let progressInterval;
+let cancelExportFlag = false;
+
+function showExportProgress(printUrl) {
+    // Reset cancel flag
+    cancelExportFlag = false;
+    
+    // Show the overlay
+    const overlay = document.getElementById('pdfProgressOverlay');
+    overlay.classList.remove('hidden');
+    
+    // Start progress animation
+    let progress = 0;
+    const progressBar = document.getElementById('progressBar');
+    
+    progressInterval = setInterval(() => {
+        if (cancelExportFlag) {
+            clearInterval(progressInterval);
+            return;
+        }
+        
+        progress += Math.random() * 15; // Random increment for realistic feel
+        if (progress > 90) progress = 90; // Cap at 90% until actual completion
+        
+        progressBar.style.width = progress + '%';
+    }, 300);
+    
+    // Open print page in new window/tab
+    setTimeout(() => {
+        if (!cancelExportFlag) {
+            exportWindow = window.open(printUrl, '_blank');
+            
+            // Monitor when the print window is closed or PDF is generated
+            monitorExportCompletion();
+        }
+    }, 1000);
+}
+
+function monitorExportCompletion() {
+    const checkWindow = setInterval(() => {
+        if (cancelExportFlag) {
+            clearInterval(checkWindow);
+            return;
+        }
+        
+        // Check if export window is closed
+        if (exportWindow && exportWindow.closed) {
+            completeExport();
+            clearInterval(checkWindow);
+        }
+    }, 1000);
+    
+    // Auto-hide after 10 seconds as fallback
+    setTimeout(() => {
+        if (!cancelExportFlag) {
+            completeExport();
+        }
+        clearInterval(checkWindow);
+    }, 10000);
+}
+
+function completeExport() {
+    // Complete the progress bar
+    const progressBar = document.getElementById('progressBar');
+    progressBar.style.width = '100%';
+    
+    // Hide overlay after a short delay
+    setTimeout(() => {
+        hideExportProgress();
+    }, 500);
+}
+
+function hideExportProgress() {
+    const overlay = document.getElementById('pdfProgressOverlay');
+    overlay.classList.add('hidden');
+    
+    // Reset progress bar
+    const progressBar = document.getElementById('progressBar');
+    progressBar.style.width = '0%';
+    
+    // Clear interval if running
+    if (progressInterval) {
+        clearInterval(progressInterval);
+    }
+}
+
+function cancelExport() {
+    cancelExportFlag = true;
+    
+    // Close export window if open
+    if (exportWindow && !exportWindow.closed) {
+        exportWindow.close();
+    }
+    
+    hideExportProgress();
+}
+
+// Handle cases where user closes the browser window
+window.addEventListener('beforeunload', () => {
+    if (exportWindow && !exportWindow.closed) {
+        exportWindow.close();
+    }
+});
+</script>
