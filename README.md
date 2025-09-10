@@ -2,7 +2,7 @@
 
 The Work Management App is a task management tool that allows users to create jobs, each containing multiple tasks. Tasks can be marked as either completed or pending. The app also provides the ability to generate and download a final report in PDF format, summarizing the status of all tasks within a job.
 
-You can access the live application [here](https://work-management-1l6f.onrender.com/data).
+You can access the live application [here](https://work-management-1l6f.onrender.com).
 
 ## ✨ Features
 - **Job Management**: Create, edit, and delete jobs.
