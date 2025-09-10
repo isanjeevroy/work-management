@@ -85,7 +85,7 @@ app.use((req, res, next) => {
 // Registration
 app.get("/signup", async (req, res) => {
     if (req.isAuthenticated()) {
-        return res.redirect("/data");
+        return res.redirect("/dashboard");
     }
     res.render("users/signup.ejs");
 });
@@ -114,7 +114,7 @@ app.post("/signup", async (req, res) => {
 app.get("/login", (req, res) => {
 
     if (req.isAuthenticated()) {
-        return res.redirect("/data");
+        return res.redirect("/dashboard");
     }
     res.render("users/login.ejs");
 })
@@ -126,7 +126,7 @@ app.post("/login",
     }),
     async (req, res) => {
         req.flash("success", "Welcome back to page!");
-        res.redirect("/data");
+        res.redirect("/dashboard");
     }
 );
 
@@ -204,7 +204,7 @@ app.get("/print/:jobId", async (req, res) => {
 
 
 // Index Route
-app.get("/data", WrapAsync(async (req, res) => {
+app.get("/dashboard", WrapAsync(async (req, res) => {
     if (!req.isAuthenticated()) {
         req.flash("error", "you must be logged to access!");
         return res.redirect("/login");
@@ -220,7 +220,7 @@ app.get("/data", WrapAsync(async (req, res) => {
     const endIndex = startIndex + perPage;
     const currentData = allData.slice(startIndex, endIndex);
     // Render the EJS template with data and pagination variables
-    res.render("features/data.ejs", { allData: currentData, currentPage: page, totalPages: totalPages });
+    res.render("features/dashboard.ejs", { allData: currentData, currentPage: page, totalPages: totalPages });
 }));
 
 
@@ -263,7 +263,7 @@ app.post("/newjob", WrapAsync(async (req, res) => {
     const totalDataCount = allData.length;
     const totalPages = Math.ceil(totalDataCount / perPage);
     req.flash("success", "New Job has created!");
-    res.redirect(`/data?page=${totalPages}`);
+    res.redirect(`/dashboard?page=${totalPages}`);
 }));
 
 //Delete Job Route
@@ -297,7 +297,7 @@ app.get("/confirm-delete/:jobId", WrapAsync(async (req, res) => {
     const page = params.get('page'); // Get the value of the 'page' parameter
     const pageNo = (page > 2) ? page - 1 : 1;
     req.flash("error", "Job has been deleted!");
-    res.redirect(`/data?page=${pageNo}`);
+    res.redirect(`/dashboard?page=${pageNo}`);
 }));
 
 // new work 
@@ -368,7 +368,7 @@ app.get("/job/:jobId/work/:workId/delete", WrapAsync(async (req, res) => {
 }));
 
 app.get("/", (req, res) => {
-    res.send("I'm Root");
+    res.render("features/home.ejs");
 });
 
 // Not Found Route
