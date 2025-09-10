@@ -1,0 +1,37 @@
+@media print {
+    @page {
+        margin: 0.5in;
+        size: A4;
+    }
+
+    body {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    .no-print {
+        display: none !important;
+    }
+}
+
+.print-container {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    background: white;
+}
+
+.task-counter::before {
+    counter-increment: task-counter;
+    content: counter(task-counter, decimal) ". ";
+    font-weight: bold;
+    color: #374151;
+}
+
+.completed-counter {
+    counter-reset: task-counter;
+}
+
+.pending-counter {
+    counter-reset: task-counter;
+}
