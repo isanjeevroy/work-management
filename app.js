@@ -367,6 +367,10 @@ app.get("/job/:jobId/work/:workId/delete", WrapAsync(async (req, res) => {
 
 }));
 
+app.get("/demovideo", (req, res) => {
+    res.send("Coming Soon....");
+});
+
 app.get("/", (req, res) => {
     if (req.isAuthenticated()) {
         return res.redirect("/dashboard");
