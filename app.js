@@ -368,6 +368,9 @@ app.get("/job/:jobId/work/:workId/delete", WrapAsync(async (req, res) => {
 }));
 
 app.get("/", (req, res) => {
+    if (req.isAuthenticated()) {
+        return res.redirect("/dashboard");
+    }
     res.render("features/home.ejs");
 });
 
