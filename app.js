@@ -102,7 +102,7 @@ app.post("/signup", async (req, res) => {
                 return next(err);
             }
             req.flash("success", "Welcome to Wanderlust");
-            res.redirect("/data");
+            res.redirect("/dashboard");
         });
     } catch (e) {
         req.flash("error", e.message);
@@ -371,6 +371,14 @@ app.get("/demovideo", (req, res) => {
     res.send("Coming Soon....");
 });
 
+app.get("/terms", (req, res) => {
+  res.render("rule-policy/terms");
+});
+
+app.get("/privacy", (req, res) => {
+  res.render("rule-policy/privacy");
+});
+
 app.get("/", (req, res) => {
     if (req.isAuthenticated()) {
         return res.redirect("/dashboard");
@@ -380,7 +388,7 @@ app.get("/", (req, res) => {
 
 // Not Found Route
 app.all("*", (req, res, next) => {
-    next(new ExpressError(404, "Page Not Found!"));
+    res.render("page-not-found.ejs")
 });
 
 app.use((err, req, res, next) => {
